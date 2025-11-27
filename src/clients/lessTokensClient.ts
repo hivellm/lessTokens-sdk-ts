@@ -7,13 +7,23 @@ import type { CompressionOptions, CompressedPrompt } from '../types.js';
 import { retry, DEFAULT_RETRY_CONFIG } from '../utils/retry.js';
 
 /**
- * LessTokens API client
+ * Client for LessTokens API
+ * 
+ * Handles communication with the LessTokens compression API, including
+ * authentication, retry logic, and error handling.
  */
 export class LessTokensClient {
   private readonly apiKey: string;
   private readonly baseUrl: string;
   private readonly timeout: number;
 
+  /**
+   * Creates a new LessTokensClient instance
+   * 
+   * @param apiKey - LessTokens API key
+   * @param baseUrl - Base URL for LessTokens API (default: 'https://lesstokens.hive-hub.ai')
+   * @param timeout - Request timeout in milliseconds (default: 30000)
+   */
   constructor(apiKey: string, baseUrl: string = 'https://lesstokens.hive-hub.ai', timeout: number = 30000) {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash
@@ -22,6 +32,12 @@ export class LessTokensClient {
 
   /**
    * Internal method to perform the compression request
+   * 
+   * @param requestBody - Request body with prompt and compression options
+   * @param prompt - Original prompt (used as fallback if compression fails)
+   * @returns Promise resolving to compression results
+   * @throws {LessTokensError} If request fails
+   * @internal
    */
   async performCompressionRequest(
     requestBody: Record<string, unknown>,
@@ -63,7 +79,18 @@ export class LessTokensClient {
         );
       }
 
-      const data = (await response.json()) as {
+      const responseData = (await response.json()) as {
+        success?: boolean;
+        requestId?: string;
+        data?: {
+          compressed?: string;
+          originalTokens?: number;
+          compressedTokens?: number;
+          tokensSaved?: number;
+          compressionRatio?: number;
+          processingTimeMs?: number;
+        };
+        // Fallback for direct response format
         compressed?: string;
         originalTokens?: number;
         compressedTokens?: number;
@@ -71,12 +98,19 @@ export class LessTokensClient {
         ratio?: number;
       };
 
+      // Extract data from nested structure or use direct format
+      const data = responseData.data || responseData;
+
+      // Handle both API response formats
+      const tokensSaved = 'tokensSaved' in data ? data.tokensSaved : ('savings' in data ? data.savings : 0);
+      const compressionRatio = 'compressionRatio' in data ? data.compressionRatio : ('ratio' in data ? data.ratio : 1.0);
+
       return {
         compressed: data.compressed || prompt,
         originalTokens: data.originalTokens || 0,
         compressedTokens: data.compressedTokens || 0,
-        savings: data.savings || 0,
-        ratio: data.ratio || 1.0,
+        savings: tokensSaved ?? 0,
+        ratio: compressionRatio ?? 1.0,
       };
     } catch (error) {
       clearTimeout(timeoutId);

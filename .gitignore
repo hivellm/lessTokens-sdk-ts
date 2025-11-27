@@ -41,3 +41,6 @@ temp/
 
 # Scripts directory (temporary files)
 scripts/
+
+# Test project (not versioned)
+test-project/

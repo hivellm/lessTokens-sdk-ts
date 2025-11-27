@@ -10,7 +10,19 @@ import { DeepSeekProvider } from './deepseek.js';
 import { createError, ErrorCodes } from '../errors.js';
 
 /**
- * Provider factory
+ * Creates a provider instance based on the provider name
+ * 
+ * @param provider - Provider name ('openai', 'anthropic', 'google', 'deepseek')
+ * @param apiKey - Provider API key
+ * @param baseURL - Optional custom base URL (mainly for DeepSeek)
+ * @returns Provider instance implementing LLMProvider interface
+ * @throws {LessTokensError} If provider is not supported
+ * 
+ * @example
+ * ```typescript
+ * const provider = createProvider('openai', 'sk-...');
+ * const response = await provider.chat(messages, config);
+ * ```
  */
 export function createProvider(provider: string, apiKey: string, baseURL?: string): LLMProvider {
   const normalizedProvider = provider.toLowerCase();

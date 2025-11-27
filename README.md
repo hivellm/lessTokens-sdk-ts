@@ -1,6 +1,6 @@
 # LessTokens SDK
 
-[![npm version](https://img.shields.io/npm/v/@lesstokens/sdk.svg)](https://www.npmjs.com/package/@lesstokens/sdk)
+[![npm version](https://img.shields.io/npm/v/@hive-hub/lessTokens-sdk-ts.svg)](https://www.npmjs.com/package/@hive-hub/lessTokens-sdk-ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 
@@ -16,20 +16,20 @@ Modern and simple TypeScript SDK for integrating with the LessTokens token compr
 - 🎯 **Flexible**: Supports multiple LLM providers
 - 🔌 **Full Provider Support**: Uses official SDKs for complete feature support
 
-## 📦 Instalação
+## 📦 Installation
 
 ```bash
-npm install @lesstokens/sdk
-# ou
-yarn add @lesstokens/sdk
-# ou
-pnpm add @lesstokens/sdk
+npm install @hive-hub/lessTokens-sdk-ts
+# or
+yarn add @hive-hub/lessTokens-sdk-ts
+# or
+pnpm add @hive-hub/lessTokens-sdk-ts
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import { LessTokensSDK } from '@lesstokens/sdk';
+import { LessTokensSDK } from '@hive-hub/lessTokens-sdk-ts';
 
 // Initialize SDK
 const sdk = new LessTokensSDK({
@@ -54,10 +54,8 @@ console.log('Tokens saved:', response.usage.savings, '%');
 
 ## 📖 Documentation
 
-- [Complete Documentation](./docs/README.md)
-- [API Reference](./docs/API.md)
-- [Usage Examples](./docs/EXAMPLES.md)
-- [Integration Analysis](./docs/INTEGRATION_ANALYSIS.md)
+- [TypeDoc API Reference](./docs/index.html) - Generated API documentation
+- All code is fully documented with JSDoc comments
 
 ## 🎯 How It Works
 
@@ -102,6 +100,161 @@ const response = await sdk.processPrompt({
   compressionOptions: {
     targetRatio: 0.3, // Compress to 30%
     aggressive: true,
+    preserveContext: true,
+  },
+});
+```
+
+### Multi-turn Conversations
+
+```typescript
+const response = await sdk.processPrompt({
+  prompt: 'What did I just say?',
+  llmConfig: {
+    apiKey: process.env.OPENAI_API_KEY!,
+    model: 'gpt-4',
+  },
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant.' },
+    { role: 'user', content: 'Hello, my name is Alice.' },
+    { role: 'assistant', content: 'Hello Alice! Nice to meet you.' },
+  ],
+});
+```
+
+### Custom Message Role and Content
+
+The SDK supports customizing the role and content of the compressed message:
+
+```typescript
+// Custom role (default: 'user')
+const response1 = await sdk.processPrompt({
+  prompt: 'Explain quantum computing',
+  llmConfig: { apiKey: '...', model: 'gpt-4' },
+  messageRole: 'system', // Can be 'user', 'system', 'assistant', etc.
+});
+
+// Custom content as string
+const response2 = await sdk.processPrompt({
+  prompt: 'Explain quantum computing',
+  llmConfig: { apiKey: '...', model: 'gpt-4' },
+  messageContent: 'Please explain this concept in simple terms: What is quantum computing?',
+});
+
+// Custom content with function (access compression stats)
+const response3 = await sdk.processPrompt({
+  prompt: 'Explain quantum computing',
+  llmConfig: { apiKey: '...', model: 'gpt-4' },
+  messageContent: (compressed) => {
+    return `[Compressed from ${compressed.originalTokens} to ${compressed.compressedTokens} tokens]\n\n${compressed.compressed}`;
+  },
+});
+```
+
+**Supported Roles:**
+- `'user'` - User message (default)
+- `'system'` - System message/instruction
+- `'assistant'` - Assistant response (for multi-turn conversations)
+- Provider-specific roles are also supported (e.g., `'model'` for Google)
+
+### Full Provider API Support
+
+All provider-specific options are fully supported and passed through to the official SDKs:
+
+```typescript
+// OpenAI - All options supported
+const response = await sdk.processPrompt({
+  prompt: 'Generate a story',
+  llmConfig: {
+    apiKey: process.env.OPENAI_API_KEY!,
+    model: 'gpt-4',
+    temperature: 0.8,
+    maxTokens: 150,
+    // All OpenAI-specific options are supported
+    n: 1,
+    logit_bias: { '1234': 0.5 },
+    user: 'test-user',
+    response_format: { type: 'text' },
+    tools: [...],
+    tool_choice: 'auto',
+    logprobs: true,
+    presence_penalty: 0.5,
+    frequency_penalty: 0.5,
+    // ... any other OpenAI API option
+  },
+});
+
+// Anthropic - All options supported
+const response2 = await sdk.processPrompt({
+  prompt: 'Explain AI',
+  llmConfig: {
+    apiKey: process.env.ANTHROPIC_API_KEY!,
+    model: 'claude-3-opus-20240229',
+    maxTokens: 1024,
+    temperature: 0.7,
+    // All Anthropic-specific options
+    system: 'You are a helpful assistant.',
+    tools: [...],
+    tool_choice: 'auto',
+    stop_sequences: ['\n\nHuman:'],
+    top_k: 50,
+    metadata: { user_id: 'user-123' },
+    // ... any other Anthropic API option
+  },
+});
+
+// Google - All options supported
+const response3 = await sdk.processPrompt({
+  prompt: 'Generate content',
+  llmConfig: {
+    apiKey: process.env.GOOGLE_API_KEY!,
+    model: 'gemini-pro',
+    temperature: 0.7,
+    maxTokens: 500,
+    // All Google-specific options
+    topK: 40,
+    topP: 0.95,
+    candidateCount: 1,
+    safetySettings: [...],
+    systemInstruction: 'You are a creative writer.',
+    tools: [...],
+    cachedContent: 'cache-id',
+    // ... any other Google API option
+  },
+});
+```
+
+### Combining All Features
+
+You can combine all features together:
+
+```typescript
+const response = await sdk.processPrompt({
+  prompt: 'Continue the conversation',
+  llmConfig: {
+    apiKey: process.env.OPENAI_API_KEY!,
+    model: 'gpt-4',
+    temperature: 0.8,
+    maxTokens: 150,
+    // All provider options
+    n: 1,
+    tools: [...],
+    tool_choice: 'auto',
+  },
+  // Multi-turn conversation
+  messages: [
+    { role: 'system', content: 'You are a creative writer.' },
+    { role: 'user', content: 'Write a short story about a robot.' },
+  ],
+  // Custom role for the compressed prompt
+  messageRole: 'user',
+  // Custom content with compression stats
+  messageContent: (compressed) => {
+    return `[Compressed: ${compressed.originalTokens} → ${compressed.compressedTokens} tokens]\n\n${compressed.compressed}`;
+  },
+  // Compression options
+  compressionOptions: {
+    targetRatio: 0.5,
     preserveContext: true,
   },
 });
@@ -162,7 +315,7 @@ The SDK returns detailed usage metrics:
 ## ⚠️ Error Handling
 
 ```typescript
-import { LessTokensSDK, LessTokensError } from '@lesstokens/sdk';
+import { LessTokensSDK, LessTokensError } from '@hive-hub/lessTokens-sdk-ts';
 
 try {
   const response = await sdk.processPrompt({...});
@@ -183,12 +336,41 @@ The SDK uses official provider SDKs internally, which means:
 - ✅ **Type-safe** with complete TypeScript definitions
 - ✅ **Optimized performance** from official SDKs
 - ✅ **Automatic updates** when providers add new features
+- ✅ **Multi-turn conversations** via `messages` array
+- ✅ **Custom message roles** and content
+- ✅ **Complete compatibility** with all provider-specific options
 
-See [Integration Analysis](./docs/INTEGRATION_ANALYSIS.md) for details.
+### Supported Provider Options
+
+**OpenAI** (`openai`):
+- Common: `temperature`, `maxTokens`, `topP`, `frequencyPenalty`, `presencePenalty`, `stop`
+- Advanced: `n`, `logit_bias`, `user`, `response_format`, `logprobs`, `top_logprobs`, `stream_options`
+- Function Calling: `tools`, `tool_choice`, `parallel_tool_calls`
+- And **all other OpenAI API options** - see [OpenAI API Reference](https://platform.openai.com/docs/api-reference/chat/create)
+
+**Anthropic** (`anthropic`):
+- Common: `temperature`, `maxTokens`, `topP`, `topK`
+- Advanced: `system`, `stop_sequences`, `metadata`, `stream`
+- Function Calling: `tools`, `tool_choice`
+- And **all other Anthropic API options** - see [Anthropic API Reference](https://docs.anthropic.com/claude/reference/messages_post)
+
+**Google** (`google`):
+- Common: `temperature`, `maxTokens`, `topP`, `topK`
+- Advanced: `candidateCount`, `safetySettings`, `systemInstruction`, `cachedContent`
+- Function Calling: `tools`, `toolConfig`
+- And **all other Google API options** - see [Google GenAI API Reference](https://ai.google.dev/api)
+
+**DeepSeek** (`deepseek`):
+- Same as OpenAI (OpenAI-compatible API)
+- All OpenAI options are supported
+
+**Important**: All provider-specific options are passed through to the official SDKs via the `[key: string]: unknown` index signature, ensuring **100% compatibility** with all current and future provider features.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [contributing guide](./CONTRIBUTING.md) first.
+Contributions are welcome! Please read our [Contributing Guide](./CONTRIBUTING.md) first.
+
+We appreciate all contributions, whether they're bug reports, feature suggestions, documentation improvements, or code contributions.
 
 ## 📄 License
 
@@ -196,10 +378,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 🔗 Links
 
-- [Complete Documentation](./docs/README.md)
-- [API Reference](./docs/API.md)
-- [Usage Examples](./docs/EXAMPLES.md)
-- [Integration Analysis](./docs/INTEGRATION_ANALYSIS.md)
+- [TypeDoc API Reference](./docs/index.html)
 - [LessTokens Website](https://lesstokens.com)
 - [Report Bug](https://github.com/lesstokens/sdk-typescript/issues)
 
@@ -209,5 +388,5 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
-Made with ❤️ by the LessTokens team
+Made with ❤️ by the Hive-Hub Team
 

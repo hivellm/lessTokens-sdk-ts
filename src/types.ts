@@ -22,10 +22,16 @@ export interface LessTokensConfig {
 export interface ProcessPromptOptions {
   /** Prompt text to be processed */
   prompt: string;
-  /** LLM API configuration */
+  /** LLM API configuration - supports all provider-specific options */
   llmConfig: LLMConfig;
   /** Compression options */
   compressionOptions?: CompressionOptions;
+  /** Custom message role (default: 'user') */
+  messageRole?: string;
+  /** Custom message content. Can be a string or a function that receives the compressed prompt and returns the content */
+  messageContent?: string | ((compressed: CompressedPrompt) => string);
+  /** Additional messages to include in the conversation (for multi-turn conversations) */
+  messages?: Array<{ role: string; content: string }>;
 }
 
 /**
