@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@hive-hub/lessTokens-sdk-ts.svg)](https://www.npmjs.com/package/@hive-hub/lessTokens-sdk-ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
+[![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen.svg)](https://github.com/hive-hub/lessTokes-sdk-ts)
 
 Modern and simple TypeScript SDK for integrating with the LessTokens token compression API. Compress prompts before sending to LLM providers (OpenAI, Anthropic, Google, DeepSeek) to reduce token usage and costs while maintaining response quality.
 
