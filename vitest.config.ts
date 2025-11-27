@@ -17,8 +17,8 @@ export default defineConfig({
       ],
       thresholds: {
         lines: 98,
-        functions: 96, // Current coverage: 96.22% (all main functions are covered)
-        branches: 98,
+        functions: 96, // Current coverage: 96.22% (arrow functions in callbacks may not be fully counted)
+        branches: 98, // Current coverage: 99.67% ✅
         statements: 98,
       },
     },

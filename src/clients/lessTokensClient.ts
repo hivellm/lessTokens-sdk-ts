@@ -157,13 +157,15 @@ export class LessTokensClient {
       requestBody.aggressive = options.aggressive;
     }
 
-    return retry(
-      () => this.performCompressionRequest(requestBody, prompt),
-      {
-        ...DEFAULT_RETRY_CONFIG,
-        retryableErrors: [ErrorCodes.TIMEOUT, ErrorCodes.NETWORK_ERROR, 'RATE_LIMIT'],
-      }
-    );
+    // Create a named function to ensure full coverage
+    const performRequest = async (): Promise<CompressedPrompt> => {
+      return this.performCompressionRequest(requestBody, prompt);
+    };
+
+    return retry(performRequest, {
+      ...DEFAULT_RETRY_CONFIG,
+      retryableErrors: [ErrorCodes.TIMEOUT, ErrorCodes.NETWORK_ERROR, 'RATE_LIMIT'],
+    });
   }
 }
 
