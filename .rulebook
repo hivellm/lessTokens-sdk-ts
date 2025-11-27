@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "installedAt": "2025-11-26T23:34:17.981Z",
+  "updatedAt": "2025-11-26T23:34:17.984Z",
+  "projectId": "3449ec31-e206-482b-8e4e-322a2e53a48b",
+  "mode": "full",
+  "features": {
+    "watcher": true,
+    "agent": true,
+    "logging": true,
+    "telemetry": true,
+    "notifications": false,
+    "dryRun": false,
+    "gitHooks": false,
+    "repl": false,
+    "templates": false,
+    "context": false,
+    "health": false,
+    "plugins": false,
+    "parallel": false,
+    "smartContinue": false
+  },
+  "coverageThreshold": 98,
+  "language": "en",
+  "outputLanguage": "en",
+  "cliTools": [],
+  "maxParallelTasks": 1,
+  "timeouts": {
+    "taskExecution": 300000,
+    "cliResponse": 60000,
+    "testRun": 120000
+  },
+  "languages": [
+    "typescript"
+  ],
+  "frameworks": [],
+  "modules": [
+    "context7"
+  ],
+  "modular": true,
+  "rulebookDir": "rulebook"
+}
