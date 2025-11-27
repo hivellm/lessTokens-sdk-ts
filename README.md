@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 
-Modern and simple TypeScript SDK for integrating with the LessTokens token compression API.
+Modern and simple TypeScript SDK for integrating with the LessTokens token compression API. Compress prompts before sending to LLM providers (OpenAI, Anthropic, Google, DeepSeek) to reduce token usage and costs while maintaining response quality.
 
 ## ✨ Features
 
