@@ -1,6 +1,6 @@
 {
   "name": "@hivehub/lesstokens-sdk-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modern TypeScript SDK for integrating with the LessTokens token compression API. Compress prompts before sending to LLM providers (OpenAI, Anthropic, Google, DeepSeek) to reduce token usage and costs while maintaining response quality.",
   "type": "module",
   "main": "./dist/index.js",
