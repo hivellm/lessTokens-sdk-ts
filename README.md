@@ -1,6 +1,6 @@
 # LessTokens SDK
 
-[![npm version](https://img.shields.io/npm/v/@hive-hub/lessTokens-sdk-ts.svg)](https://www.npmjs.com/package/@hive-hub/lessTokens-sdk-ts)
+[![npm version](https://img.shields.io/npm/v/@hivehub/lesstokens-sdk-ts.svg)](https://www.npmjs.com/package/@hivehub/lesstokens-sdk-ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen.svg)](https://github.com/hive-hub/lessTokes-sdk-ts)
@@ -20,17 +20,17 @@ Modern and simple TypeScript SDK for integrating with the LessTokens token compr
 ## 📦 Installation
 
 ```bash
-npm install @hive-hub/lessTokens-sdk-ts
+npm install @hivehub/lesstokens-sdk-ts
 # or
-yarn add @hive-hub/lessTokens-sdk-ts
+yarn add @hivehub/lesstokens-sdk-ts
 # or
-pnpm add @hive-hub/lessTokens-sdk-ts
+pnpm add @hivehub/lesstokens-sdk-ts
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import { LessTokensSDK } from '@hive-hub/lessTokens-sdk-ts';
+import { LessTokensSDK } from '@hivehub/lesstokens-sdk-ts';
 
 // Initialize SDK
 const sdk = new LessTokensSDK({
@@ -316,7 +316,7 @@ The SDK returns detailed usage metrics:
 ## ⚠️ Error Handling
 
 ```typescript
-import { LessTokensSDK, LessTokensError } from '@hive-hub/lessTokens-sdk-ts';
+import { LessTokensSDK, LessTokensError } from '@hivehub/lesstokens-sdk-ts';
 
 try {
   const response = await sdk.processPrompt({...});
