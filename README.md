@@ -380,7 +380,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## 🔗 Links
 
 - [TypeDoc API Reference](./docs/index.html)
-- [LessTokens Website](https://lesstokens.com)
+- [LessTokens Website](https://lesstokens.hive-hub.ai)
 - [Report Bug](https://github.com/lesstokens/sdk-typescript/issues)
 
 ## 📝 Changelog
